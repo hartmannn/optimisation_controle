@@ -1,7 +1,6 @@
 function [F,G,ind]=OraclePG(qc,ind)
     F=0;
-    s=n-md;
-    G=zeros(s,1);
+    G=zeros(n-md,1);
     
     Pg1=q0+B*qc;
     

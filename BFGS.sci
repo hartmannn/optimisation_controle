@@ -1,12 +1,12 @@
 exec("Wolfe_Skel.sci");
-function [fopt,xopt,gopt]=Gradient_V(Oracle,xini)
+function [fopt,xopt,gopt]=BFGS(Oracle,xini)
 
 
 ///////////////////////////////////////////////////////////////////////////////
 //                                                                           //
 //         RESOLUTION D'UN PROBLEME D'OPTIMISATION SANS CONTRAINTES          //
 //                                                                           //
-//         Methode de gradient a pas variable                                //
+//                         Algorithme de BFGS                                //
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -15,7 +15,7 @@ function [fopt,xopt,gopt]=Gradient_V(Oracle,xini)
 // Parametres de la methode
 // ------------------------
 
-   titre = "Parametres du gradient a pas variable";
+   titre = "Parametres de l algorithme de BFGS";
    labels = ["Nombre maximal d''iterations";...
              "Valeur du pas de gradient";...
              "Seuil de convergence sur ||G||"];
@@ -38,7 +38,13 @@ function [fopt,xopt,gopt]=Gradient_V(Oracle,xini)
 // -------------------------
 
    x = xini;
-
+   
+// - initialisation des variables :
+   s=n-md;
+   W=eye(s,s);
+   Gprec=zeros(s,1);
+   xprec=zeros(s,1);
+   
    kstar = iter;
    for k = 1:iter
 
@@ -55,8 +61,19 @@ function [fopt,xopt,gopt]=Gradient_V(Oracle,xini)
       end
 
 //    - calcul de la direction de descente
-
-      D = -G;
+      delta_x=x-xprec;
+      delta_G=G-Gprec;
+      facteur=1/(delta_G'*delta_x);
+      
+      W=(eye(s,s)-facteur*(delta_x*delta_G'))*W...
+        *(eye(s,s)-facteur*(delta_G*delta_x'))...
+        +facteur*(delta_x*delta_x');
+      
+      D = -W*G;
+      
+//    - on garde en mémoire les valeurs du point et du gradient
+      Gprec=G;
+      xprec=x;
 
 //    - calcul de la longueur du pas de gradient
 
@@ -65,7 +82,7 @@ function [fopt,xopt,gopt]=Gradient_V(Oracle,xini)
 //    - mise a jour des variables
 
       x = x + (alpha*D);
-
+      
 //    - evolution du gradient, du pas et du critere
 
       logG = [ logG ; log10(norm(G)) ];
@@ -96,3 +113,5 @@ function [fopt,xopt,gopt]=Gradient_V(Oracle,xini)
    Visualg(logG,logP,Cout);
 
 endfunction
+
+

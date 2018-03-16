@@ -3,12 +3,12 @@
 //  MONITEUR D'ENCHAINEMENT POUR LE CALCUL DE L'EQUILIBRE D'UN RESEAU D'EAU  //
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
-
+    clear;
 // --------------------------------------
 // Dimensionnement de l'espace de travail
 // --------------------------------------
 
-   stacksize(10000000);
+   //stacksize(10000000);
 
 // ------------------------------------------
 // Fonctions fournies dans le cadre du projet
@@ -20,7 +20,7 @@
    exec('Structures_R.sce');
    
    // Affichage des resultats
-
+   titrgr="Titre bidon";
    exec('Visualg.sci');
    
    // Verification  des resultats
@@ -42,9 +42,8 @@
    //exec('Optim_Scilab.sci');
    //titrgr = "Fonction optim de Scilab sur le probleme primal";
 
-   // -----> A completer...
-   // -----> A completer...
-   // -----> A completer...
+    exec('OraclePH.sci');
+    exec('Newton.sci');
 
 // ------------------------------
 // Initialisation de l'algorithme
@@ -62,7 +61,7 @@
    //
    //[fopt,xopt,gopt] = Optim_Scilab(OraclePG,xini);
 
-   // -----> A completer...
+   [fopt,xopt,gopt]=Newton(OraclePH,xini);
 
 // --------------------------
 // Verification des resultats
