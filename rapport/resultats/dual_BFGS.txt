@@ -1,0 +1,15 @@
+Fin de la methode BFGS
+
+!Iteration         :   77         !
+!                                 !
+!Temps CPU         :   0.081817   !
+!                                 !
+!Critere optimal   :   3.7340070  !
+!                                 !
+!Norme du gradient :   0.0000003  !
+
+Verification des equations d'equilibre du reseau
+
+!sur les debits    :   0.0000002  !
+!                                 !
+!sur les pressions :   0          !

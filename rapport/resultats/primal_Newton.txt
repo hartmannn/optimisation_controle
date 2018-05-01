@@ -1,0 +1,16 @@
+
+ Fin de la methode de Newton
+
+!Iteration         :   7           !
+!                                  !
+!Temps CPU         :   0.040158    !
+!                                  !
+!Critere optimal   :   -3.7340070  !
+!                                  !
+!Norme du gradient :   1.642D-12   !
+
+ Verification des equations d'equilibre du reseau
+
+!sur les debits    :   1.388D-16  !
+!                                 !
+!sur les pressions :   1.167D-12  !

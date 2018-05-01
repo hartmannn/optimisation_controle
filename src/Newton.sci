@@ -1,12 +1,12 @@
 exec("Wolfe_Skel.sci");
-function [fopt,xopt,gopt]=Gradient_V(Oracle,xini)
+function [fopt,xopt,gopt]=Newton(Oracle,xini)
 
 
 ///////////////////////////////////////////////////////////////////////////////
 //                                                                           //
 //         RESOLUTION D'UN PROBLEME D'OPTIMISATION SANS CONTRAINTES          //
 //                                                                           //
-//         Methode de gradient a pas variable                                //
+//                         Algorithme de Newton                              //
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -15,7 +15,7 @@ function [fopt,xopt,gopt]=Gradient_V(Oracle,xini)
 // Parametres de la methode
 // ------------------------
 
-   titre = "Parametres du gradient a pas variable";
+   titre = "Parametres de l algorithme de Newton";
    labels = ["Nombre maximal d''iterations";...
              "Valeur du pas de gradient";...
              "Seuil de convergence sur ||G||"];
@@ -38,14 +38,13 @@ function [fopt,xopt,gopt]=Gradient_V(Oracle,xini)
 // -------------------------
 
    x = xini;
-
    kstar = iter;
    for k = 1:iter
 
 //    - valeur du critere et du gradient
 
-      ind = 4;
-      [F,G] = Oracle(x,ind);
+      ind = 7;
+      [F,G,H] = Oracle(x,ind);
 
 //    - test de convergence
 
@@ -55,9 +54,8 @@ function [fopt,xopt,gopt]=Gradient_V(Oracle,xini)
       end
 
 //    - calcul de la direction de descente
-
-      D = -G;
-
+      D=-H^(-1)*G;
+      
 //    - calcul de la longueur du pas de gradient
 
       [alpha,ok]=Wolfe(alphai,x,D,Oracle);
@@ -65,7 +63,7 @@ function [fopt,xopt,gopt]=Gradient_V(Oracle,xini)
 //    - mise a jour des variables
 
       x = x + (alpha*D);
-
+      
 //    - evolution du gradient, du pas et du critere
 
       logG = [ logG ; log10(norm(G)) ];
@@ -88,7 +86,7 @@ function [fopt,xopt,gopt]=Gradient_V(Oracle,xini)
            'Temps CPU         : ' string(tcpu);...
            'Critere optimal   : ' string(fopt);...
            'Norme du gradient : ' string(norm(gopt))];
-   disp('Fin de la methode de gradient a pas fixe')
+   disp('Fin de la methode de Newton')
    disp(cvge)
 
 // - visualisation de la convergence
@@ -96,3 +94,5 @@ function [fopt,xopt,gopt]=Gradient_V(Oracle,xini)
    Visualg(logG,logP,Cout);
 
 endfunction
+
+

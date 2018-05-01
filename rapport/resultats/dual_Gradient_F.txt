@@ -1,0 +1,15 @@
+Fin de la methode de gradient a pas fixe
+
+!Iteration         :   5000       !
+!                                 !
+!Temps CPU         :   0.554548   !
+!                                 !
+!Critere optimal   :   722.40172  !
+!                                 !
+!Norme du gradient :   6.4772146  !
+
+Verification des equations d'equilibre du reseau
+
+!sur les debits    :   5.7268459  !
+!                                 !
+!sur les pressions :   0          !

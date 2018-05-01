@@ -1,12 +1,11 @@
-exec("Wolfe_Skel.sci");
-function [fopt,xopt,gopt]=Newton(Oracle,xini)
+function [fopt,xopt,gopt]=Polak_Ribiere(Oracle,xini)
 
 
 ///////////////////////////////////////////////////////////////////////////////
 //                                                                           //
 //         RESOLUTION D'UN PROBLEME D'OPTIMISATION SANS CONTRAINTES          //
 //                                                                           //
-//                         Algorithme de Newton                              //
+//                Algorithme de Polak-Ribière                                //
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -15,7 +14,7 @@ function [fopt,xopt,gopt]=Newton(Oracle,xini)
 // Parametres de la methode
 // ------------------------
 
-   titre = "Parametres de l algorithme de Newton";
+   titre = "Parametres de l algorithme de Polak-Ribière";
    labels = ["Nombre maximal d''iterations";...
              "Valeur du pas de gradient";...
              "Seuil de convergence sur ||G||"];
@@ -38,14 +37,20 @@ function [fopt,xopt,gopt]=Newton(Oracle,xini)
 // -------------------------
 
    x = xini;
+   
+// - initialisation des variables :
+   dim_x=size(xini)(1);
+   Gprec=zeros(dim_x,1);
+   D=zeros(dim_x,1);
+   
    kstar = iter;
    for k = 1:iter
 
 //    - valeur du critere et du gradient
 
-      ind = 7;
-      [F,G,H] = Oracle(x,ind);
-
+      ind = 4;
+      [F,G] = Oracle(x,ind);
+      
 //    - test de convergence
 
       if norm(G) <= tol then
@@ -54,8 +59,12 @@ function [fopt,xopt,gopt]=Newton(Oracle,xini)
       end
 
 //    - calcul de la direction de descente
-      D=-H^(-1)*G;
+      beta_=((G-Gprec)'*G)/(Gprec'*Gprec);
+      D = -G+beta_*D;  
       
+//    - on garde en mémoire la valeur du gradient
+      Gprec=G;  
+
 //    - calcul de la longueur du pas de gradient
 
       [alpha,ok]=Wolfe(alphai,x,D,Oracle);
@@ -86,7 +95,7 @@ function [fopt,xopt,gopt]=Newton(Oracle,xini)
            'Temps CPU         : ' string(tcpu);...
            'Critere optimal   : ' string(fopt);...
            'Norme du gradient : ' string(norm(gopt))];
-   disp('Fin de la methode de gradient a pas fixe')
+   disp('Fin de la methode de Polak_Ribiere')
    disp(cvge)
 
 // - visualisation de la convergence
@@ -94,5 +103,4 @@ function [fopt,xopt,gopt]=Newton(Oracle,xini)
    Visualg(logG,logP,Cout);
 
 endfunction
-
 

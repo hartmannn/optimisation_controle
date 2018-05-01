@@ -20,7 +20,7 @@
    exec('Structures_R.sce');
    
    // Affichage des resultats
-   titrgr="Titre bidon";
+   titrgr="";
    exec('Visualg.sci');
    
    // Verification  des resultats
@@ -42,16 +42,18 @@
    //exec('Optim_Scilab.sci');
    //titrgr = "Fonction optim de Scilab sur le probleme primal";
 
-    exec('OraclePH.sci');
-    exec('Newton.sci');
+    exec('OracleDG.sci');
+    //exec('Wolfe_Skel.Sci');
+    exec('Gradient_F.sci');
 
 // ------------------------------
 // Initialisation de l'algorithme
 // ------------------------------
 
    // La dimension (n-md) est celle du probleme primal
-
-   xini = 0.1 * rand(n-md,1);
+   dim_p=n-md;
+   dim_d=md;
+   xini = 0.1 * rand(dim_d,1);
 
 // ----------------------------
 // Minimisation proprement dite
@@ -61,13 +63,13 @@
    //
    //[fopt,xopt,gopt] = Optim_Scilab(OraclePG,xini);
 
-   [fopt,xopt,gopt]=Newton(OraclePH,xini);
+   [fopt,xopt,gopt]=Gradient_F(OracleDG,xini);
 
 // --------------------------
 // Verification des resultats
 // --------------------------
 
-   [q,z,f,p] = HydrauliqueP(xopt);
+   [q,z,f,p] = HydrauliqueD(xopt);
 
    Verification(q,z,f,p);
 

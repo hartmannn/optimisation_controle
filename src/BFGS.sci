@@ -1,12 +1,11 @@
-exec("Wolfe_Skel.sci");
-function [fopt,xopt,gopt]=Polak_Ribiere(Oracle,xini)
+function [fopt,xopt,gopt]=BFGS(Oracle,xini)
 
 
 ///////////////////////////////////////////////////////////////////////////////
 //                                                                           //
 //         RESOLUTION D'UN PROBLEME D'OPTIMISATION SANS CONTRAINTES          //
 //                                                                           //
-//                Algorithme de Polak-Ribière                                //
+//                         Algorithme de BFGS                                //
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -15,7 +14,7 @@ function [fopt,xopt,gopt]=Polak_Ribiere(Oracle,xini)
 // Parametres de la methode
 // ------------------------
 
-   titre = "Parametres de l algorithme de Polak-Ribière";
+   titre = "Parametres de l algorithme de BFGS";
    labels = ["Nombre maximal d''iterations";...
              "Valeur du pas de gradient";...
              "Seuil de convergence sur ||G||"];
@@ -40,8 +39,10 @@ function [fopt,xopt,gopt]=Polak_Ribiere(Oracle,xini)
    x = xini;
    
 // - initialisation des variables :
-   Gprec=zeros(n-md,1);
-   D=zeros(n-md,1);
+   dim_x=size(xini)(1);
+   W=eye(dim_x,dim_x);
+   Gprec=zeros(dim_x,1);
+   xprec=zeros(dim_x,1);
    
    kstar = iter;
    for k = 1:iter
@@ -50,7 +51,7 @@ function [fopt,xopt,gopt]=Polak_Ribiere(Oracle,xini)
 
       ind = 4;
       [F,G] = Oracle(x,ind);
-      
+
 //    - test de convergence
 
       if norm(G) <= tol then
@@ -59,11 +60,19 @@ function [fopt,xopt,gopt]=Polak_Ribiere(Oracle,xini)
       end
 
 //    - calcul de la direction de descente
-      beta_=((G-Gprec)'*G)/(G'*G);
-      D = -G+beta_*D;  
+      delta_x=x-xprec;
+      delta_G=G-Gprec;
+      facteur=1/(delta_G'*delta_x);
       
-//    - on garde en mémoire la valeur du gradient
-      Gprec=G;  
+      W=(eye(dim_x,dim_x)-facteur*(delta_x*delta_G'))*W...
+        *(eye(dim_x,dim_x)-facteur*(delta_G*delta_x'))...
+        +facteur*(delta_x*delta_x');
+      
+      D = -W*G;
+      
+//    - on garde en mémoire les valeurs du point et du gradient
+      Gprec=G;
+      xprec=x;
 
 //    - calcul de la longueur du pas de gradient
 
@@ -95,7 +104,7 @@ function [fopt,xopt,gopt]=Polak_Ribiere(Oracle,xini)
            'Temps CPU         : ' string(tcpu);...
            'Critere optimal   : ' string(fopt);...
            'Norme du gradient : ' string(norm(gopt))];
-   disp('Fin de la methode de gradient a pas fixe')
+   disp('Fin de la methode BFGS')
    disp(cvge)
 
 // - visualisation de la convergence
@@ -103,4 +112,5 @@ function [fopt,xopt,gopt]=Polak_Ribiere(Oracle,xini)
    Visualg(logG,logP,Cout);
 
 endfunction
+
 
