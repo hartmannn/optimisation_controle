@@ -1,0 +1,15 @@
+Fin de la methode de Polak_Ribiere
+
+!Iteration         :   1741       !
+!                                 !
+!Temps CPU         :   4.119894   !
+!                                 !
+!Critere optimal   :   3.7340070  !
+!                                 !
+!Norme du gradient :   0.000001   !
+
+Verification des equations d'equilibre du reseau
+
+!sur les debits    :   0.0000008  !
+!                                 !
+!sur les pressions :   0          !

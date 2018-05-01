@@ -40,7 +40,9 @@ function [fopt,xopt,gopt]=Polak_Ribiere(Oracle,xini)
    
 // - initialisation des variables :
    dim_x=size(xini)(1);
-   Gprec=zeros(dim_x,1);
+   ind = 4;
+   [F,G] = Oracle(x,ind);
+   Gprec=G;
    D=zeros(dim_x,1);
    
    kstar = iter;
