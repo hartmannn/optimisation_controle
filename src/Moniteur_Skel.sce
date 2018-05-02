@@ -42,9 +42,11 @@
    //exec('Optim_Scilab.sci');
    //titrgr = "Fonction optim de Scilab sur le probleme primal";
 
-    exec('OracleDG.sci');
+    exec('OracleDH.sci');
     //exec('Wolfe_Skel.Sci');
-    exec('Gradient_F.sci');
+    //exec('BFGS.sci');
+    //exec('Polak_Ribiere.sci');
+    exec('Newton.sci');
 
 // ------------------------------
 // Initialisation de l'algorithme
@@ -63,7 +65,7 @@
    //
    //[fopt,xopt,gopt] = Optim_Scilab(OraclePG,xini);
 
-   [fopt,xopt,gopt]=Gradient_F(OracleDG,xini);
+   [fopt,xopt,gopt]=Newton(OracleDH,xini);
 
 // --------------------------
 // Verification des resultats

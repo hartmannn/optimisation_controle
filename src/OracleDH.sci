@@ -16,7 +16,6 @@ function [F,G,H,ind]=OracleDH(lambda,ind)
     end
     
     if ind==5 | ind==6 | ind==7 then
-        b=2*sqrt(r.*abs(a));
-        H=Ad*diag(ones(a)./b)*Ad';
+        H=(1/2)*Ad*diag(1./sqrt(abs(a.*r)))*Ad';
     end
 endfunction
